@@ -12,10 +12,7 @@ int main() {
 	table[5] = 1;
 
 	for (int i = 6; i <= N; i++) {
-		if (table[i - 5] && table[i - 3]) {
-			table[i] = min(table[i - 5], table[i - 3]) + 1;
-		}
-		else if (table[i - 5]) {
+		if (table[i - 5]) {
 			table[i] = table[i - 5] + 1;
 		}
 		else if (table[i - 3]) {
