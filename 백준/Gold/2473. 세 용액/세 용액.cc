@@ -1,4 +1,4 @@
-// 세 용액  // two pointer // 틀린 풀이
+// 세 용액  // two pointer
 #include <bits/stdc++.h>
 
 using namespace std;
