@@ -6,14 +6,12 @@
 using namespace std;
 typedef long long ll;
 
-vector<int> mu(45001, -1); // sqrt(2K)보다 크게 넉넉하게 잡음
-vector<bool> isPrime(45001, true); // 소수인지 확인하는 리스트
-vector<int> p_vec; // sqrt_K 이하의 소수 리스트
+vector<int> mu(45001, 0); // sqrt(2K)보다 크게 넉넉하게 잡음
 
 ll square_free_num(ll K) {
 	// K 이하의 square-free integer의 갯수(F) 구하기
 	ll F = 0;
-	for (ll i = 1; i*i <= K; i++) {
+	for (ll i = 1; i * i <= K; i++) {
 		F += mu[i] * (K / (i * i));
 	}
 	return F;
@@ -25,30 +23,16 @@ int main() {
 	cout.tie(NULL);
 	ll K;
 	cin >> K;
-	// mu 리스트를 구현
+	// mu 리스트를 구현  // 배수의 홀짝성이 바뀌는 것을 이용한 코드
 	mu[1] = 1;
-	for (int i = 2; i <= 45000; i++) {
-		if (isPrime[i]) {
-			p_vec.push_back(i); // 소수 추가
-		}
-		for (int p = 0; p < p_vec.size(); p++) {
-			int p_val = p_vec[p];
-			int ip = i * p_val;
-			if (ip > 45000) {
-				break;
-			}
-			isPrime[ip] = false; // i * p_val는 소수가 아님
-			if (i % p_val == 0) { // i가 p_val의 배수이면 i * p_val(ip)는 제곱수를 인자로 가짐
-				mu[ip] = 0; // ip가 제곱수를 인자로 가지므로 0
-				break;
-			}
-			mu[ip] = mu[i] * mu[p_val]; // ip의 mu값 계산
+	for (int i = 1; i <= 45000; i++) {
+		for (int j = 2 * i; j <= 45000; j += i) {
+			mu[j] -= mu[i];
 		}
 	}
-	
 	// 이분 탐색을 통해 K번째 제곱ㄴㄴ수를 구하기
 	ll low = K;
-	ll high = 2*K;
+	ll high = 2 * K;
 	ll mid;
 	ll ans = 0;
 	while (low <= high) {
