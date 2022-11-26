@@ -141,7 +141,6 @@ int main() {
 	cout.tie(NULL);
 	cin >> N;
 	vector<vector<int>> board(21, vector<int>(21, 0));
-	int val;
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
 			cin >> board[i][j];
