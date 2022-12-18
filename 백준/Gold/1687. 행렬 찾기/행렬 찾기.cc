@@ -34,6 +34,9 @@ int main() {
 				int height = matrix[i][j]; // 직사각형의 높이
 				// j ~ 0까지 k를 옮겨가면서 최대 넓이 갱신
 				for (int k = j; k >= 0; k--) {
+					if (matrix[i][k] == 0) {
+						break;
+					}
 					int width = j - k + 1; // 직사각형의 너비
 					height = min(height, matrix[i][k]); // 높이 갱신(가능한 높이 중 최대)
 					max_area = max(max_area, height * width);
