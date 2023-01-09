@@ -18,13 +18,11 @@ int N, M, K;
 deque<cs> deq;
 int dy[4] = { 0, 0, 1, -1 };
 int dx[4] = { 1, -1, 0, 0 };
-int cnt = 0;
 
 void bfs() {
     queue<cs> que;
     cs first = deq.front();
     que.push(first);
-    cnt++;
     board[first.y][first.x] = first.p;
     deq.pop_front();
     while (!que.empty()) {
@@ -39,7 +37,6 @@ void bfs() {
                 int np = A.p - 1;
                 if (ny <= N && ny >= 1 && nx <= M && nx >= 1 && board[ny][nx] == -1) {
                     que.push({ np, ny, nx });
-                    cnt++;
                     board[ny][nx] = np;
                 }
             }
@@ -48,7 +45,6 @@ void bfs() {
             // deq.front() <= A.p - 1가 될 때까지
             while (!deq.empty() && deq.front().p > A.p - 1) {
                 que.push(deq.front());
-                cnt++;
                 board[deq.front().y][deq.front().x] = deq.front().p;
                 deq.pop_front();
             } 
@@ -58,7 +54,6 @@ void bfs() {
                 int np = A.p - 1; // 1 이상임
                 if (ny <= N && ny >= 1 && nx <= M && nx >= 1 && board[ny][nx] == -1) {
                     que.push({ np, ny, nx });
-                    cnt++;
                     board[ny][nx] = np;
                 }
             }
@@ -66,7 +61,6 @@ void bfs() {
         // que가 비었으면 deq로 채워넣기
         if (que.empty() && !deq.empty()) {
             que.push(deq.front());
-            cnt++;
             board[deq.front().y][deq.front().x] = deq.front().p;
             deq.pop_front();
         }
@@ -105,8 +99,6 @@ int main() {
         cout << "\n";
     }
     */
-
-    //cout << cnt << "\n";
     int count = 0;
     for (int i = 1; i <= N; i++) {
         for (int j = 1; j <= M; j++) {
