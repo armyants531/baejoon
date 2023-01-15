@@ -1,4 +1,4 @@
-// 최단경로  // dijkstra(priority queue) // 시간 초과
+// 최단경로  // dijkstra(priority queue)
 // https://velog.io/@717lumos/%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EB%8B%A4%EC%9D%B5%EC%8A%A4%ED%8A%B8%EB%9D%BCDijkstra-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98 참고
 #include <bits/stdc++.h>
 #define INF 2147483647
@@ -20,8 +20,8 @@ vector<int> dijkstra(int start, int V) {
 		current_node = pq.top().second;
 		current_dist = pq.top().first;
 		pq.pop(); // pop the current node
-		int len = adj[current_node].size();	
-		for (int i = 0; i < len; i++) {
+		if (dist[current_node] < current_dist) continue;
+		for (int i = 0; i < adj[current_node].size(); i++) {
 			// next node info
 			next_node = adj[current_node][i].first;
 			next_dist = adj[current_node][i].second + current_dist;
