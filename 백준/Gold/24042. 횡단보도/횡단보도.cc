@@ -16,6 +16,8 @@ ll dijkstra(ll start, ll end, ll M) { // 시작, 끝, 주기
 		ll curr_cost = pq.top().first;
 		ll curr_node = pq.top().second;
 		pq.pop();
+		// 현재 꺼낸 것보다 짧은 거리를 알고 있다면 건너뛰기
+		if (cost[curr_node] < curr_cost) continue;
 		for (auto next : adj[curr_node]) { // 인접 노드 탐색
 			ll next_cost = curr_cost;
 			ll next_node = next.second;
