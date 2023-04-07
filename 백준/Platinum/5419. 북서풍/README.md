@@ -4,11 +4,11 @@
 
 ### 성능 요약
 
-메모리: 6548 KB, 시간: 532 ms
+메모리: 6548 KB, 시간: 488 ms
 
 ### 분류
 
-값 / 좌표 압축(coordinate_compression), 자료 구조(data_structures), 세그먼트 트리(segtree), 스위핑(sweeping)
+자료 구조, 세그먼트 트리, 스위핑, 값 / 좌표 압축
 
 ### 문제 설명
 

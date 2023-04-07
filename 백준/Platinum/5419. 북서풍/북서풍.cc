@@ -1,8 +1,9 @@
 // 북서풍  // segment tree  // 좌표 압축  // 스위핑
-// 북서쪽으로 가면 x좌표는 감소하고, y좌표는 증가
+// 북서풍을 타면 x좌표는 증가하고, y좌표는 감소
 // x좌표에 대해 오름차순 정렬을 하되, 같으면 y좌표에 대해 내림차순으로 정렬한다.
 // 순서쌍 개수를 알아내기 위해 x좌표가 작은 순으로(정렬 순으로) 구간 쿼리 수행(y좌표에 대해서는 좌표 압축을 실행하여 인덱스를 구함) 
 // https://polohee81.tistory.com/16 참고
+// https://blog.naver.com/PostView.naver?blogId=kks227&logNo=220907708368&redirect=Dlog&widgetTypeCall=true&directAccess=false 참고
 #include <bits/stdc++.h>
 
 using namespace std;
