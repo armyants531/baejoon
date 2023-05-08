@@ -15,18 +15,6 @@ struct point {
 vector<point> arr;
 int N, K;
 
-/*
-struct compare {
-  bool operator() (point &p1, point &p2) {
-    if (p1.avg == p2.avg) {
-      return p1.P < p2.P; // P에 대해 내림차순 
-    }
-    return p1.avg < p2.avg; // avg에 대해 내림차순
-  }
-};
-*/
-
-
 // -Qi * D + Pi 값이 가장 큰 Qi, Pi 쌍 K개를 더해 리턴 
 double cal(double D) {
   double sum = 0;
