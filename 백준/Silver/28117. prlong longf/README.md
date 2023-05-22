@@ -1,10 +1,10 @@
-# [Silver II] prlong longf - 28117 
+# [Silver I] prlong longf - 28117 
 
 [문제 링크](https://www.acmicpc.net/problem/28117) 
 
 ### 성능 요약
 
-메모리: 2032 KB, 시간: 0 ms
+메모리: 2024 KB, 시간: 0 ms
 
 ### 분류
 
