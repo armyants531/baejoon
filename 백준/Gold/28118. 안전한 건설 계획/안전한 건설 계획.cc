@@ -1,68 +1,57 @@
+// 안전한 건설 계획  // 분리 집합
+// 분리 집합의 개수를 구하면 된다
 #include <bits/stdc++.h>
 
 using namespace std;
 
-int id = 1; // 노드별 고유 id
-int scc_cnt = 0; // SCC 갯수
-vector<int> parent_arr(10001, 0); // 처음 설정된 id 저장하는 리스트(부모 저장), 처음에는 0으로 초기화
-bool finished[10001] = { false, };
-vector<int> adj[10001]; // adjacent list 
-stack<int> st;
+vector<int> parent(41);
+vector<int> cnt(41);
 
-// dfs는 정점의 개수 만큼 실행됨
-int dfs(int p) { // p: 현재 노드
-    parent_arr[p] = id; // 노드마다 고유한 번호 할당 
-    id++;
-    st.push(p); // 스택에 자기 자신을 삽입 
+int get_parent(int x) {
+	if (parent[x] == x) {
+		return x;
+	}
+	return parent[x] = get_parent(parent[x]);
+}
 
-    int parent = parent_arr[p]; // 부모를 고유 번호로 설정
-    for (int i = 0; i < adj[p].size(); i++) { // p와 인접한 노드 탐색
-        int q = adj[p][i]; // p와 인접하는 노드 중 하나
-        if (parent_arr[q] == 0) { // 방문하지 않았으면
-            // dfs 진행하고, 부모를 SCC내 가장 작은 값으로 갱신
-            parent = min(parent, dfs(q));
-        }
-        else if (finished[q] == false) { // 방문은 했으나 dfs를 수행 중인 노드인 경우
-            parent = min(parent, parent_arr[q]); // parent 값을 처리 중인 노드의 parent와 비교(처리 중인 이웃이 자신의 부모라면 SCC에 포함하기 위해)
-        }
-    }
+void union_parent(int x, int y) {
+	x = get_parent(x);
+	y = get_parent(y);
+	if (x < y) {
+		parent[y] = x;
+	}
+	else {
+		parent[x] = y;
+	}
+}
 
-    if (parent == parent_arr[p]) { // 부모 노드가 자기 자신인 경우
-        while (true) {
-            int t = st.top();
-            finished[t] = true; // t를 종료 처리
-            st.pop();   
-            if (t == p) { // stack의 top이 자기 자신이면
-                break; // 종료
-            }
-        }
-        scc_cnt++; // scc 갯수 증가
-    }
-    // 부모 값을 반환
-    return parent;
+bool same_parent(int x, int y) {
+	return get_parent(x) == get_parent(y);
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    int V, E;
-    cin >> V >> E;
-    for (int i = 1; i <= E; i++) {
-        int A, B;
-        cin >> A >> B;
-        adj[A].push_back(B);
-        adj[B].push_back(A);
-    }
-
-    // 각 정점에 대해 dfs를 시행 
-    for (int i = 1; i <= V; i++) {
-        if (parent_arr[i] == 0) { // 방문하지 않았으면
-            dfs(i);
-        }
-    }
-    // 출력
-    cout << scc_cnt - 1 << "\n";
-
-    return 0;
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	int N, M;
+	cin >> N >> M;
+	for (int i = 1; i <= N; i++) {
+		parent[i] = i;
+	}
+	int a, b;
+	for (int i = 0; i < M; i++) {
+		cin >> a >> b;
+		union_parent(a, b);
+	}
+	// parent에 연결된 노드 수 세기
+	for (int i = 1; i <= N; i++) {
+		cnt[get_parent(i)]++;
+	}
+	// 분리 집합 수 세기
+	int ans = 0;
+	for (int i = 1; i <= N; i++) {
+		if (cnt[i] != 0) ans++;
+	}
+	cout << ans - 1 << "\n";
+	return 0;
 }
