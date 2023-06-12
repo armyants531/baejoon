@@ -34,7 +34,7 @@ void manacher(string s, int n) {
 }
 
 int main() {
-	ios_base::sync_with_stdio;
+	ios_base::sync_with_stdio(NULL);
 	cin.tie(NULL);
 	cout.tie(NULL);
 	string s;
