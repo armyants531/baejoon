@@ -1,55 +1,49 @@
-// 팰린드롬?  // dp  // memoization
+// 팰린드롬?  // dp  // tabulation
 #include <bits/stdc++.h>
 
 using namespace std;
+typedef long long ll;
 
-int table[2000][2000]; // 팰린드롬 여부 확인 테이블
-vector<int> arr; // 수열 저장
+bool table[2000][2000];
 
-int palindrome(int S, int E) {
-	int& ret = table[S][E]; // table[S][E] 값을 참조
-	if (ret != -1) { // 이미 적혀 있으면
-		return ret;
+void tabulation(vector<int> arr, int n) {
+	// 크기 1
+	for (int i = 0; i < n; i++) {
+		table[i][i] = true;
 	}
-	if (arr[S] != arr[E]) { // 양 끝이 다르면
-		return ret = 0;
+	// 크기 2
+	for (int i = 0; i < n - 1; i++) {
+		if (arr[i] == arr[i + 1]) {
+			table[i][i + 1] = true;
+		}
 	}
-	else { // 양 끝이 같으면
-		if (S + 2 == E) { // 판별해야 하는 수가 1개만 남으면
-			return ret = 1;
-		}
-		else if (S + 1 == E) { // 판별해야 하는 수가 0개 남으면
-			return ret = 1;
-		}
-		else { // 판별해야 하는 수가 2개 이상이면 
-			return ret = palindrome(S + 1, E - 1); // 계속 판별 진행 
+	// 크기 3이상
+	for (int k = 2; k < n; k++) { // 크기 3~n
+		for (int i = 0; i + k < n; i++) {
+			if (arr[i] == arr[i+k] && table[i + 1][i + k - 1]) {
+				table[i][i + k] = true;
+			}
 		}
 	}
 }
 
 int main() {
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	memset(table, -1, sizeof(table)); // -1로 초기화
+	cin.tie(0);
+	cout.tie(0);
 	int N;
 	cin >> N;
-	int A;
+	vector<int> arr(N);
 	for (int i = 0; i < N; i++) {
-		cin >> A;
-		arr.push_back(A);
+		cin >> arr[i];
 	}
+	tabulation(arr, N);
 	int M;
 	cin >> M;
 	int S, E;
 	for (int i = 0; i < M; i++) {
 		cin >> S >> E;
-		if (S == E) {
-			cout << 1 << "\n";
-		}
-		else {
-			cout << palindrome(S - 1, E - 1) << "\n";
-		}
+		cout << table[S - 1][E - 1] << "\n";
 	}
 	return 0;
 }
