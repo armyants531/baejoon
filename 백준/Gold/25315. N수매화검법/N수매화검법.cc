@@ -25,6 +25,9 @@ int CCW(coord A, coord B, coord C) {
 }
 
 int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
 	int N;
 	cin >> N;
 	vector<ll> sx(N);
@@ -49,7 +52,7 @@ int main() {
 			// CD를 기준으로 점 A, B의 CCW 확인
 			int sign2 = CCW(C, D, A) * CCW(C, D, B);
 			if (sign1 == -1 && sign2 == -1) { // 교차
-				if (w[i] > w[j]) { // w 값이 작은 선분 배열에 다른 쪽 선분 번호 넣어줌
+				if (w[i] > w[j]) { // w 값이 작은 선분 번호의 개수 증가(w가 큰 베기를 먼저 시행해야 함 -> w가 작은 값을 더해줌)
 					cnt[j]++;
 				}
 				else {
