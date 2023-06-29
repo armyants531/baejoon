@@ -3,9 +3,7 @@
 using namespace std;
 typedef long long ll;
 
-vector<vector<int>> adj(2501);
-vector<int> inDegree(2501);
-vector<int> ans(2501);
+vector<vector<int>> adj(2501);;
 
 // CCW(counter clockwise)
 // 세 점이 일직선 위에 있는 경우 x
@@ -24,31 +22,6 @@ int CCW(coord A, coord B, coord C) {
 		return -1;
 	else
 		return 0;
-}
-
-void topologySort(int n) {
-	queue<int> que;
-	// insert the nodes which have 0 indegree
-	for (int i = 1; i <= n; i++) {
-		if (inDegree[i] == 0) {
-			que.push(i);
-		}
-	}
-	for (int i = 1; i <= n; i++) {
-		// if queue is empty before visit n node
-		if (que.empty()) {
-			return;
-		}
-		int node = que.front();
-		que.pop();
-		ans[i] = node;
-		for (auto next : adj[node]) {
-			inDegree[next]--;
-			if (inDegree[next] == 0) {
-				que.push(next);
-			}
-		}
-	}
 }
 
 int main() {
@@ -76,18 +49,15 @@ int main() {
 			// CD를 기준으로 점 A, B의 CCW 확인
 			int sign2 = CCW(C, D, A) * CCW(C, D, B);
 			if (sign1 == -1 && sign2 == -1) { // 교차
-				if (w[i] > w[j]) {
+				if (w[i] > w[j]) { // w 값이 작은 것에 선분 번호 넣어줌
 					adj[j].push_back(i);
 				}
 				else {
 					adj[i].push_back(j);
 				}
-				arr[i] = true;
-				arr[j] = true;
 			}
 		}
 	}
-	topologySort(N);
 	for (int i = 0; i < N; i++) {
 		sum += (adj[i].size() + 1) * w[i];
 	}
