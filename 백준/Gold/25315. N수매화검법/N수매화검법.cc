@@ -3,7 +3,7 @@
 using namespace std;
 typedef long long ll;
 
-vector<vector<int>> adj(2501);;
+vector<int> cnt(2501);
 
 // CCW(counter clockwise)
 // 세 점이 일직선 위에 있는 경우 x
@@ -49,17 +49,17 @@ int main() {
 			// CD를 기준으로 점 A, B의 CCW 확인
 			int sign2 = CCW(C, D, A) * CCW(C, D, B);
 			if (sign1 == -1 && sign2 == -1) { // 교차
-				if (w[i] > w[j]) { // w 값이 작은 것에 선분 번호 넣어줌
-					adj[j].push_back(i);
+				if (w[i] > w[j]) { // w 값이 작은 선분 배열에 다른 쪽 선분 번호 넣어줌
+					cnt[j]++;
 				}
 				else {
-					adj[i].push_back(j);
+					cnt[i]++;
 				}
 			}
 		}
 	}
 	for (int i = 0; i < N; i++) {
-		sum += (adj[i].size() + 1) * w[i];
+		sum += (cnt[i] + 1) * w[i];
 	}
 	cout << sum << "\n";
 
