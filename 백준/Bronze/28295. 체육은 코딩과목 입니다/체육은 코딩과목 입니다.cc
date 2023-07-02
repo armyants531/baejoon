@@ -8,25 +8,13 @@ int main() {
 	cin.tie(NULL);
 	cout.tie(NULL);
 	int n;
-	vector<int> A(4);
-	string s = "NESWNESWNESW";
+	string s = "NESW";
+	int idx = 0;
 	for (int i = 0; i < 10; i++) {
 		cin >> n;
-		A[n]++;
+		idx += n;
 	}
-	A[2] %= 2;
-	A[1] %= 4;
-	A[3] %= 4;
-	int idx = 4;
-	if (A[1] > A[3]) {
-		idx += A[1] - A[3];
-	}
-	else {
-		idx -= A[3] - A[1];
-	}
-	if (A[2]) {
-		idx += 2;
-	}
+	idx %= 4;
 	cout << s[idx] << "\n";
 	return 0;	
 }
