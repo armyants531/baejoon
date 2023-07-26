@@ -1,49 +1,46 @@
-// 나무 자르기  // https://www.acmicpc.net/blog/view/109#comments 참고
 #include <bits/stdc++.h>
+#define int long long
 
 using namespace std;
+typedef long long ll;
 
-vector<long long> tree(1000000);
-// mid 높이에 절단기 설치 시 M 이상의 나무를 얻을 수 있는지 여부를 구하여 리턴
-bool check(int mid, int N, int M) {
-	long long sum = 0;
+vector<int> tree;
+
+int cal(int k, int N, int M) {
+	int sum = 0;
 	for (int i = 0; i < N; i++) {
-		if (tree[i] > mid) {
-			sum += tree[i] - mid;
+		if (tree[i] >= k) {
+			sum += tree[i] - k;
 		}
+		if (sum > M) break;	
 	}
-	if (sum >= M) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return sum;
 }
 
-int binary_search(int low, int high, int N, int M) {
-	while (low < high - 1) { // low와 high사이에 칸이 존재할 때까지
-		int mid = (low + high) / 2;
-		if (check(mid, N, M)) // mid 높이에서 충분한 나무를 얻을 수 있으면 
-			low = mid; // 높이 증가
-		else
-			high = mid; // 높이 하락
-	}
-	// low == high - 1 일 때
-	return low; 
-}
-
-int main() {
+signed main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cout.tie(NULL);
 	int N, M;
 	cin >> N >> M;
+	tree.resize(N);
 	for (int i = 0; i < N; i++) {
-		cin >> tree[i]; 
+		cin >> tree[i];
 	}
-	// binary search
-	int low = 0, high = 1000000000; // 나무의 최저, 최대 높이로 설정
-	cout << binary_search(low, high, N, M) << "\n";
-
+	int low = 0;
+	int high = 1000000000;
+	int max_h = 0;
+	while (low <= high) {
+		int mid = (low + high) / 2;
+		if (cal(mid, N, M) >= M) {
+			max_h = max(max_h, mid);
+			low = mid + 1;
+		}
+		else {
+			high = mid - 1;
+		}
+	}
+	cout << max_h << "\n";
+	
 	return 0;
 }
