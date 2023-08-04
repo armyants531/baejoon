@@ -1,89 +1,9 @@
-// 벚꽃 엔딩  // segment tree + binary search + sweeping 풀이
+// 벚꽃 엔딩  // two-pointer  // sweeping
 #include <bits/stdc++.h>
 #define int long long
 
 using namespace std;
 using pii = pair<int, int>;
-
-// 구간 내 E의 최솟값 구하는 세그먼트 트리 초기화
-int init_min(vector<int>& a, vector<int>& tree, int idx, int start, int end) {
-	if (start == end) {
-		return tree[idx] = a[start];
-	}
-	else {
-		int mid = (start + end) / 2;
-		return tree[idx] = min(init_min(a, tree, idx * 2, start, mid), init_min(a, tree, idx * 2 + 1, mid + 1, end));
-	}
-}
-
-// 구간 내 S의 최댓값 구하는 세그먼트 트리 초기화
-int init_max(vector<int>& a, vector<int>& tree, int idx, int start, int end) {
-	if (start == end) {
-		return tree[idx] = a[start];
-	}
-	else {
-		int mid = (start + end) / 2;
-		return tree[idx] = max(init_max(a, tree, idx * 2, start, mid), init_max(a, tree, idx * 2 + 1, mid + 1, end));
-	}
-}
-
-// left, right 구간 내 E의 최솟값 구하기
-int query_min(vector<int>& tree, int idx, int start, int end, int left, int right) {
-	if (end < left || right < start) { // 구간 범위 밖
-		return 1000000001;
-	}
-	else if (left <= start && end <= right) { // 구간 범위 안
-		return tree[idx];
-	}
-	else {
-		int mid = (start + end) / 2;
-		return min(query_min(tree, idx * 2, start, mid, left, right), query_min(tree, idx * 2 + 1, mid + 1, end, left, right));
-	}
-}
-
-// left, right 구간 내 S의 최댓값 구하기
-int query_max(vector<int>& tree, int idx, int start, int end, int left, int right) {
-	if (end < left || right < start) { // 구간 범위 밖
-		return 0;
-	}
-	else if (left <= start && end <= right) { // 구간 범위 안
-		return tree[idx];
-	}
-	else {
-		int mid = (start + end) / 2;
-		return max(query_max(tree, idx * 2, start, mid, left, right), query_max(tree, idx * 2 + 1, mid + 1, end, left, right));
-	}
-}
-
-bool posi(int N, int x, vector<int> max_tree, vector<int> min_tree) {
-	bool can = false;
-	for (int i = 0; i <= N - x; i++) {
-		int s_max = query_max(max_tree, 1, 0, N - 1, i, i + x - 1);
-		int e_min = query_min(min_tree, 1, 0, N - 1, i, i + x - 1);
-		if (s_max <= e_min) {
-			can = true;
-			break;
-		}
-	}
-	return can;
-}
-
-int bsearch(int N, vector<int> max_tree, vector<int> min_tree) {
-	int low = 1;
-	int high = N;
-	int ans = 0; // 연속해서 핀 벚나무 개수의 최댓값
-	while (low <= high) {
-		int mid = (low + high) / 2;
-		if (posi(N, mid, max_tree, min_tree)) {
-			low = mid + 1;
-			ans = max(ans, mid);
-		}
-		else {
-			high = mid - 1;
-		}
-	}
-	return ans;
-}
 
 signed main() {
 	ios_base::sync_with_stdio(false);
@@ -91,24 +11,47 @@ signed main() {
 	cout.tie(NULL);
 	int N, M;
 	cin >> N >> M;
-	vector<int> S(N), E(N);
-	vector<int> max_tree(4 * N), min_tree(4 * N);
-	vector<pii> c; // 가장 많은 벚나무가 일렬로 연속해서 핀 날의 구간 저장
+	int S, E;
+	vector<pii> arr(N + 1);
+	vector<pii> c; // 가장 많은 벚나무가 일렬로 연속해서 핀 날의 구간 저장 
 	for (int i = 0; i < N; i++) {
-		cin >> S[i] >> E[i];
+		cin >> S >> E;
+		arr[i] = { S, E };
 	}
-	init_min(E, min_tree, 1, 0, N - 1);
-	init_max(S, max_tree, 1, 0, N - 1);
-	int max_cnt = bsearch(N, max_tree, min_tree);
-	for (int i = 0; i <= N - max_cnt; i++) {
-		int s_max = query_max(max_tree, 1, 0, N - 1, i, i + max_cnt - 1);
-		int e_min = query_min(min_tree, 1, 0, N - 1, i, i + max_cnt - 1);
-		if (s_max <= e_min) {
-			c.push_back({ s_max, e_min });
-			//cout << s_max << " " << e_min << "\n";
+	// [i, j] 구간 투 포인터
+	int i = 0;
+	int j = 0;
+	int max_cnt = 0;
+	multiset<int> s, e; // 중복된 값이 들어올 수 있음!
+	s.insert(arr[j].first);
+	e.insert(arr[j].second);
+	while (j < N) {
+		auto max_s = s.rbegin();
+		auto min_e = e.begin();
+		int maxS = *max_s;
+		int minE = *min_e;
+		// 구간 내 S 최댓값과 E 최솟값 비교
+		if (maxS > minE) { // 안 겹치는 부분 발생
+			//cout << "1: " << i << " " << j << "\n";
+			s.erase(s.find(arr[i].first)); // 원소 하나만 삭제
+			e.erase(e.find(arr[i].second));
+			i++;
+		}
+		else {
+			//cout << "2: " << i << " " << j << "\n";
+			if (max_cnt == j - i + 1) {
+				c.push_back({ maxS, minE }); // 최대 연속 구간([maxS, minE])을 삽입
+			}
+			else if (max_cnt < j - i + 1) {
+				max_cnt = j - i + 1; // 연속해서 핀 벚나무 개수 최댓값 갱신
+				c.clear();
+				c.push_back({ maxS, minE }); // 최대 연속 구간([maxS, minE])을 삽입
+			}
+			j++;
+			s.insert(arr[j].first);
+			e.insert(arr[j].second);
 		}
 	}
-
 	// 가장 많은 벚나무가 일렬로 연속해서 핀 날을 중복 없이 세기(=2170번)
 	sort(c.begin(), c.end());
 	int len = 0;
