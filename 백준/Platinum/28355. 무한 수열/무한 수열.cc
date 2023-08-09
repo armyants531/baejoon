@@ -28,22 +28,22 @@ signed main() {
 	int p = (s - N*(N + 1)/2) / N;
 	//cout << "p: " << p << "\n";
 	int sum = 0;
-	if (p >= 2 * N - 1) {
-		// dp[i]: A[i]를 오른쪽 끝으로 하는 구간의 최대합
-		vector<int> dp(2 * N);
-		dp[0] = A[0] - 1;
-		for (int i = 1; i < 2 * N; i++) {
-			if (dp[i - 1] + A[i % N] - (i + 1) > A[i % N] - (i + 1)) {
-				dp[i] = dp[i - 1] + A[i % N] - (i + 1);
-			}
-			else {
-				dp[i] = A[i % N] - (i + 1);
-			}
+	// dp[i]: A[i]를 오른쪽 끝으로 하는 구간의 최대합
+	vector<int> dp(2 * N);
+	dp[0] = A[0] - 1;
+	for (int i = 1; i < 2 * N; i++) {
+		if (dp[i - 1] + A[i % N] - (i + 1) > A[i % N] - (i + 1)) {
+			dp[i] = dp[i - 1] + A[i % N] - (i + 1);
 		}
-		// 길이가 N미만인 경우 계산
-		for (int i = 0; i < 2 * N; i++) {
-			ans = max(ans, dp[i]);
+		else {
+			dp[i] = A[i % N] - (i + 1);
 		}
+	}
+	// 길이가 N미만인 경우 계산
+	for (int i = 0; i < 2 * N; i++) {
+		ans = max(ans, dp[i]);
+	}
+	if (p >= N) {
 		// 길이가 N이상일 때
 		// 구간 중간 부분 계산(i = N,...,p - 1)
 		int quo = (p - N) / N;
@@ -70,23 +70,6 @@ signed main() {
 		}
 		//cout << "end: " << max_e << "\n";
 		ans = max(ans, sum + max_e);
-	}
-	else { // p < 2 * N - 1
-		// dp[i]: A[i]를 오른쪽 끝으로 하는 구간의 최대합
-		int len = max(2 * N - 1, p + N - 1);
-		vector<int> dp(len + 1);
-		dp[0] = A[0] - 1;
-		for (int i = 1; i <= len; i++) {
-			if (dp[i - 1] + A[i % N] - (i + 1) > A[i % N] - (i + 1)) {
-				dp[i] = dp[i - 1] + A[i % N] - (i + 1);
-			}
-			else {
-				dp[i] = A[i % N] - (i + 1);
-			}
-		}
-		for (int i = 0; i <= len; i++) {
-			ans = max(ans, dp[i]);
-		}
 	}
 	cout << ans << "\n";
 
