@@ -18,6 +18,7 @@ signed main() {
 	}
 	else {
 		int cnt = 0;
+		// a^2 + b^2 = N
 		for (int i = 1; i <= sqrt(N / 2); i++) {
 			int b = N - i * i;
 			int q = sqrt(b);
@@ -25,26 +26,13 @@ signed main() {
 				cnt++;
 			}
 		}
-		//cout << cnt << "\n";
-		vector<int> f(1000001);
-		int c = 1;
-		int M = N;
-		for (int i = 2; i * i <= M; i++) {
-			while (M % i == 0) {
-				M /= i;
-				f[i]++;
-			}	
+		// a^2 - b^2 = (a - b)(a + b) = N
+		// let s = a-b, l = a+b
+		for (int s = 1; s * s <= N; s++) {
+			if (N % s) continue;
+			int l = N / s;
+			if (s % 2 == l % 2) cnt++;
 		}
-		if (N % 2 == 0) {
-			f[2] -= 2;
-		} 
-		for (int i = 2; i * i <= N; i++) {
-			c *= (f[i] + 1);
-		}
-		if (M != 1 && N != 2) {
-			c *= 2;
-		}
-		cnt += c / 2;
 		cout << cnt << "\n";
 	}
 	
