@@ -18,11 +18,7 @@ int dp(int n) {
 			t[i][j] = max(t[i][j + 1], t[i - j][j] + a[i]);  
 		}
 	}
-	int ans = -10000000000000;
-	for (int i = 0; i < n; i++) {
-		ans = max(ans, t[n-1][i]);
-	}
-	return ans;
+	return t[n-1][1];
 }
 
 signed main() {
