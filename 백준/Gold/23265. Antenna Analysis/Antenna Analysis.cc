@@ -13,16 +13,9 @@ signed main() {
     int n, c;
 	cin >> n >> c;
     vector<int> x(n);
-    vector<int> x1(n), x2(n); 
     vector<int> y(n);
     for (int i = 0; i < n; i++) {
         cin >> x[i];
-    }
-    for (int i = 0; i < n; i++) {
-        x1[i] = x[i] - c*i;
-    }
-    for (int i = 0; i < n; i++) {
-        x2[i] = x[i] + c*i;
     }
     int pre_min = x[0];
     int pre_max = x[0];
