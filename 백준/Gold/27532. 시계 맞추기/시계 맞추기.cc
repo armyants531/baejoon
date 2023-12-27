@@ -19,15 +19,20 @@ int main() {
 	}
 	int min_n = M;
 	for (int r = 1; r <= 720; r++) {
-		unordered_set<int> st;
+		vector<bool> vec(780); // 60 ~ 779 minute
 		for (int i = 0; i < M; i++) {
 			int t = v[i] - r * i;
 			while (t < 60) {
 				t += 720;
 			}
-			st.insert(t);
+			vec[t] = true;
 		}
-		int l = st.size();
+		int l = 0;
+		for (int i = 60; i < 780; i++) {
+			if (vec[i]) {
+				l++;
+			}
+		}
 		min_n = min(min_n, l);
 	}
 	cout << min_n << "\n";
