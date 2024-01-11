@@ -1,24 +1,25 @@
-// 앱  // dp  // tabulation
 #include <bits/stdc++.h>
+#define int long long
+#define fi first
+#define se second
 
 using namespace std;
+using pii = pair<int, int>;
+// t[i][j]: i번째 app까지 비활성화 가능할 때
+// j의 cost까지 사용가능한 경우, 최대 메모리 확보량 
+vector<vector<int>> t(101, vector<int>(10001)); 
 
-int N, M;
-// 앱-비용 테이블(테이블에는 메모리 크기 저장)
-vector<vector<int>> table(101, vector<int>(10001, 0));
-
-int knapSack(vector<pair<int, int>> apps, int tot_cost) {
-	int min_cost = tot_cost;
+int knapsack(int tot, vector<pii> app, int N, int M) {
+	int min_cost = 10001;
 	for (int i = 1; i <= N; i++) {
-		for (int j = 1; j <= tot_cost; j++) {
-			if (j >= apps[i].second) { // 앱 apps[i]를 비활성할 수 있으면
-				table[i][j] = max(table[i - 1][j], table[i - 1][j - apps[i].second] + apps[i].first);
+		for (int j = 0; j <= tot; j++) { // cost가 0인 것도 고려! 
+			if (j - app[i].se >= 0) {
+				t[i][j] = max(t[i-1][j], app[i].fi + t[i-1][j-app[i].se]);
 			}
 			else {
-				table[i][j] = table[i - 1][j];
+				t[i][j] = t[i-1][j];
 			}
-
-			if (table[i][j] >= M) { // 필요한 메모리를 충족하면
+			if (t[i][j] >= M) {
 				min_cost = min(min_cost, j);
 			}
 		}
@@ -26,26 +27,22 @@ int knapSack(vector<pair<int, int>> apps, int tot_cost) {
 	return min_cost;
 }
 
-int main() {
+signed main() {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	std::cout.tie(NULL);
+	cout.tie(NULL);
+	int N, M;
 	cin >> N >> M;
-	vector<pair<int, int>> apps(N + 1);
-	apps.push_back({ 0, 0 });
+	vector<pii> app(N + 1);
 	for (int i = 1; i <= N; i++) {
-		int mem;
-		cin >> mem;
-		apps[i].first = mem;
+		cin >> app[i].fi;
 	}
 	int tot_cost = 0;
 	for (int i = 1; i <= N; i++) {
-		int cost;
-		cin >> cost;
-		tot_cost += cost;
-		apps[i].second = cost;
+		cin >> app[i].se;
+		tot_cost += app[i].se;
 	}
-	cout << knapSack(apps, tot_cost) << "\n";
+	cout << knapsack(tot_cost, app, N, M) << "\n";
 
 	return 0;
 }
