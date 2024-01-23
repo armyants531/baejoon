@@ -22,7 +22,7 @@ signed main() {
 			continue;
 		}
 		if (i + 2 < N) {
-			string st = s.substr(0, 3);
+			string st = s.substr(i, 3);
 			if (stoi(st) <= 641) {
 				i+= 3;
 			}
