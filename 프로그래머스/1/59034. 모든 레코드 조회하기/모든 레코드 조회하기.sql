@@ -1,0 +1,4 @@
+# ANIMAL_INS 테이블의 모든 열 선택
+SELECT * FROM ANIMAL_INS
+# ANIMAL_ID에 대해 오름차순 정렬
+ORDER BY ANIMAL_ID ASC
