@@ -1,43 +1,45 @@
-// 전깃줄  // DP  // LIS
 #include <bits/stdc++.h>
 
 using namespace std;
 
-vector<int> len(100); // i번째 인덱스에서 끝나는 가장 긴 증가 부분 수열의 길이을 저장하는 리스트
-vector<int> arr(100); // 여기에서 LIS 구함
-vector<pair<int, int>> input;
+typedef long long ll;
 
-int LIS(int N) {
+vector<int> a;
+vector<int> dp; // i번 째 인덱스에서 끝나는 LIS의 길이 
+
+int LIS(int n) {
 	int max_len = 1;
-	for (int i = 0; i < N; i++) {
-		len[i] = 1;
-		for (int j = 0; j < i; j++) { // arr[i] 이전의 원소들 탐색
-			if (arr[i] > arr[j]) { // 이전의 원소보다 더 크면
-				len[i] = max(len[i], len[j] + 1); // len[i] 갱신
+	for (int i = 0; i < n; i++) {
+		dp[i] = 1;
+		for (int j = 0; j < i; j++) {
+			if (a[i] > a[j]) {
+				dp[i] = max(dp[i], dp[j] + 1);
 			}
-		}
-		max_len = max(max_len, len[i]);
+		}	
+		max_len = max(max_len, dp[i]);
 	}
+	
 	return max_len;
-}
+} 
 
 int main() {
 	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	int N;
-	cin >> N;
-	for (int i = 0; i < N; i++) {
-		int A, B;
-		cin >> A >> B;
-		input.push_back({ A, B });
+	cin.tie(0);
+	cout.tie(0);
+	int n;
+	cin >> n;
+	dp.resize(n);
+	vector<pair<int, int>> v;
+	for (int i = 0; i < n; i++) {
+		int x, y;
+		cin >> x >> y;
+		v.push_back({x, y});
 	}
-	sort(input.begin(), input.end());
-	// arr 채우기
-	for (int i = 0; i < N; i++) {
-		arr[i] = input[i].second;
+	sort(v.begin(), v.end());
+	for (int i = 0; i < n; i++) {
+		//cout << v[i].first << " " << v[i].second << "\n";
+		a.push_back(v[i].second);
 	}
-	cout << N - LIS(N) << "\n";
-
+	cout << n - LIS(n) << "\n";
 	return 0;
 }
