@@ -1,60 +1,50 @@
-// 두 용액  // two pointer
 #include <bits/stdc++.h>
+#define int long long 
 
 using namespace std;
 
-struct closest {
-	long long sum;
-	int low;
-	int high;
-};
+vector<int> a;
 
-int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
+signed main() {
+	cin.tie(NULL)->sync_with_stdio(false);
 	int N;
 	cin >> N;
-	vector<long long> arr;
-	int low = 0, high = N - 1;
-	long long val;
 	for (int i = 0; i < N; i++) {
+		int val;
 		cin >> val;
-		arr.push_back(val);
+		a.push_back(val);
 	}
-	// 오름차순 정렬
-	sort(arr.begin(), arr.end());
-	closest info;
-	info.sum = abs(arr[low] + arr[high]);
-	info.low = low;
-	info.high = high;
-	long long sum;
-	while (low < high) { // low 
-		sum = arr[low] + arr[high];
-		if (sum == 0) { // sum이 0이면 정보 업데이트 후 종료
-			info.sum = 0;
-			info.low = low;
-			info.high = high;
+	sort(a.begin(), a.end());
+	int l = 0;
+	int h = N - 1;
+	int min_sum_abs = 2000000001;
+	int ans1;
+	int ans2;
+	while (l < h) {
+		int sum = a[l] + a[h];
+		if (sum == 0) {
+			ans1 = a[l];
+			ans2 = a[h];
 			break;
 		}
 		else if (sum > 0) {
-			if (info.sum > abs(sum)) { // 두 용액의 특성값 합의 절댓값이 더 작은 경우에 갱신
-				info.sum = abs(sum);
-				info.low = low;
-				info.high = high;
+			if (min_sum_abs > sum) {
+				min_sum_abs = a[h] + a[l];
+				ans1 = a[l];
+				ans2 = a[h];
 			}
-			high--; // high를 한 칸 감소 
+			h--;
 		}
-		else { // sum < 0
-			if (info.sum > abs(sum)) {
-				info.sum = abs(sum);
-				info.low = low;
-				info.high = high;
+		else {
+			if (min_sum_abs > -sum) {
+				min_sum_abs = -sum;
+				ans1 = a[l];
+				ans2 = a[h];
 			}
-			low++; // low를 한 칸 증가
+			l++;
 		}
 	}
-	cout << arr[info.low] << " " << arr[info.high] << "\n";
-
+	cout << ans1 << " " << ans2 << "\n";
+	
 	return 0;
 }
