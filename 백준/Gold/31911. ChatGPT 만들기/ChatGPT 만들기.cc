@@ -75,24 +75,55 @@ signed main() {
 	//cout << v['s' - 'a'][27] << "\n";
 	//cout << v['s' - 'a'][19] << "\n";
 	//cout << mx['s' - 'a'] << "\n";
-	mx[27] = -1; // for '.': after '.', only '.' can be appeared
+	mx[27] = -1; // for ']': after ']', only '.' can be appeared
+	vector<bool> visited(30);
 	string ans = "[";
-	for (int i = 0; i < K + M - 1; i++) {
+	char start; // start of repeated string
+	int i = 0;
+	for (; i < K + M - 1; i++) {
 		int cur;
+		if (i >= K-1) {
+			//cout << ans[i];
+		}
 		if ('a' <= ans[i] && ans[i] <= 'z') {
 			cur = ans[i] - 'a';
+			if (visited[cur]) {
+				start = ans[i];
+				break; 
+			}
+			visited[cur] = true;
 		}
 		else if (ans[i] == '[') {	
 			cur = 26;
+			if (visited[cur]) {
+				start = ans[i];
+				break;
+			}
+			visited[cur] = true;
 		}
 		else if (ans[i] == ']') {
 			cur = 27;
+			if (visited[cur]) {
+				start = ans[i];
+				break;
+			}
+			visited[cur] = true;
 		}
 		else if (ans[i] == '-') {
 			cur = 28;
+			if (visited[cur]) {
+				start = ans[i];
+				break;
+			}
+			visited[cur] = true;
 		}
 		else { // ans[i] == '.'
 			cur = -1;
+			if (visited[29]) {
+				start = ans[i];
+				break;
+			}
+			visited[29] = true;
 		}
 		if (cur == -1) {
 			ans += '.';
@@ -107,11 +138,38 @@ signed main() {
 			}
 			else if (next == 28) {
 				ans += '-';
-			}	
+			}
+			else {  // next == -1
+				ans += '.';
+			}
 		}
 	}
-	for (int i = K - 1; i < K + M - 1; i++) {
-		cout << ans[i];
+	//cout << ans << "\n";
+	string rep = "";
+	int rep_idx;
+	for (int i = ans.size() - 2; i >= 0; i--) {
+		if (ans[i] == start) {
+			rep = ans[i] + rep;
+			rep_idx = i;
+			break;
+		}
+		else {
+			rep = ans[i] + rep;
+		}
+	}
+	if (rep_idx > K + M - 2) {
+		cout << ans.substr(K-1, M) << "\n";
+	}
+	else if (rep_idx > K - 1) {
+		cout << ans.substr(K-1, rep_idx - (K-1));
+		for (int i = 0; i < M - (rep_idx - (K-1)); i++) {
+			cout << rep[i % rep.size()];	
+		}
+	}
+	else {  // rep_idx <= K - 1
+		for (int i = K - 2 - rep_idx + 1; i < K - 2 - rep_idx + 1 + M; i++) {
+			cout << rep[i % rep.size()];	
+		}
 	}
 	
 	return 0;
