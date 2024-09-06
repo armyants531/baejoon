@@ -12,7 +12,7 @@ signed main() {
 	cout.tie(NULL);
 	int N;
 	cin >> N;
-	unordered_map<int, bool> mp;
+	vector<bool> mp(1000001);
 	bool can = false;
 	for (int i = 0; i < N; i++) {
 		int a, b, c;
